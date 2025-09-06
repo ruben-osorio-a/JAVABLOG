@@ -1,13 +1,16 @@
 package bo.com.bisa.evaluacion.modelo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "historial_blog")
 @Data
+@NoArgsConstructor
 public class HistorialBlog {
 
     @Id
@@ -16,25 +19,17 @@ public class HistorialBlog {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Blog blog;
 
-    @Column(name = "nombre_anterior")
-    private String nombreAnterior;
+    @Column(nullable = false)
+    private String nombre;
 
-    @Column(name = "tema_anterior")
-    private String temaAnterior;
+    private String tema;
 
-    @Column(name = "contenido_anterior", columnDefinition = "TEXT")
-    private String contenidoAnterior;
+    @Lob
+    private String contenido;
 
-    @Column(name = "periodicidad_anterior")
-    @Enumerated(EnumType.STRING)
-    private Periodicidad periodicidadAnterior;
-
-    @Column(name = "permite_comentarios_anterior")
-    private Boolean permiteComentariosAnterior;
-
-    @Column(name = "fecha_actualizacion", nullable = false)
-    private LocalDateTime fechaActualizacion;
+    @Column(nullable = false)
+    private LocalDateTime fechaModificacion;
 }

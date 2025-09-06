@@ -1,13 +1,16 @@
 package bo.com.bisa.evaluacion.modelo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comentario")
 @Data
+@NoArgsConstructor
 public class Comentario {
 
     @Id
@@ -16,24 +19,25 @@ public class Comentario {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blog_id", nullable = false)
-    @JsonIgnore // Evita la serializacion recursiva
+    @JsonBackReference
     private Blog blog;
 
-    @Column(name = "nombre_comentarista", nullable = false)
+    @Column(nullable = false)
     private String nombreComentarista;
 
-    @Column(name = "correo_comentarista", nullable = false)
+    @Column(nullable = false)
     private String correoComentarista;
 
-    @Column(name = "pais_residencia_comentarista", nullable = false)
     private String paisResidenciaComentarista;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Lob
+    @Column(nullable = false)
     private String contenido;
 
     @Column(nullable = false)
     private int puntuacion;
 
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDateTime fechaCreacion;
+    @Column(nullable = false)
+    private LocalDateTime fechaPublicacion;
 }
+
