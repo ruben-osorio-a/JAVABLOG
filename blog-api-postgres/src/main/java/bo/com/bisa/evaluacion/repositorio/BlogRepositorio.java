@@ -11,4 +11,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface BlogRepositorio extends JpaRepository<Blog, Long> {
+    
+    /**
+     * Verifica si existe un blog con el nombre dado
+     * @param nombre el nombre del blog a verificar
+     * @return true si existe, false en caso contrario
+     */
+    boolean existsByNombre(String nombre);
 }

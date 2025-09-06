@@ -5,9 +5,11 @@ import bo.com.bisa.evaluacion.dto.PeticionCrearBlog;
 import bo.com.bisa.evaluacion.dto.PeticionCrearComentario;
 import bo.com.bisa.evaluacion.excepcion.ExcepcionLogicaNegocio;
 import bo.com.bisa.evaluacion.excepcion.ExcepcionRecursoNoEncontrado;
+import bo.com.bisa.evaluacion.modelo.Autor;
 import bo.com.bisa.evaluacion.modelo.Blog;
 import bo.com.bisa.evaluacion.modelo.Comentario;
 import bo.com.bisa.evaluacion.modelo.HistorialBlog;
+import bo.com.bisa.evaluacion.repositorio.AutorRepositorio;
 import bo.com.bisa.evaluacion.repositorio.BlogRepositorio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,18 +23,43 @@ import java.util.List;
 public class BlogServicio {
 
     private final BlogRepositorio blogRepositorio;
+    private final AutorRepositorio autorRepositorio;
 
     @Transactional
     public Blog crear(PeticionCrearBlog peticion) {
+        // Validar que no exista un blog con el mismo nombre
+        if (blogRepositorio.existsByNombre(peticion.getNombre())) {
+            throw new ExcepcionLogicaNegocio("Ya existe un blog con el nombre: " + peticion.getNombre());
+        }
+        
+        // Validar y crear/buscar el autor
+        Autor autor = validarYCrearAutor(peticion.getAutor());
+        
         Blog nuevoBlog = new Blog();
-        nuevoBlog.setAutor(peticion.getAutor());
+        nuevoBlog.setAutor(autor);
         nuevoBlog.setNombre(peticion.getNombre());
         nuevoBlog.setTema(peticion.getTema());
         nuevoBlog.setContenido(peticion.getContenido());
         nuevoBlog.setPeriodicidad(peticion.getPeriodicidad());
         nuevoBlog.setPermiteComentarios(peticion.isPermiteComentarios());
         nuevoBlog.setFechaCreacion(LocalDateTime.now());
+        
         return blogRepositorio.save(nuevoBlog);
+    }
+    
+    /**
+     * Valida y crea un autor, o retorna el existente si ya existe
+     */
+    private Autor validarYCrearAutor(Autor autorPeticion) {
+        // Verificar si ya existe un autor con el mismo correo
+        if (autorRepositorio.existsByCorreoElectronico(autorPeticion.getCorreoElectronico())) {
+            // Si existe, retornar el autor existente
+            return autorRepositorio.findByCorreoElectronico(autorPeticion.getCorreoElectronico())
+                    .orElseThrow(() -> new ExcepcionLogicaNegocio("Error al buscar autor existente"));
+        }
+        
+        // Si no existe, crear uno nuevo
+        return autorRepositorio.save(autorPeticion);
     }
 
     @Transactional(readOnly = true)
@@ -75,11 +102,19 @@ public class BlogServicio {
     public Blog anadirComentario(Long blogId, PeticionCrearComentario peticion) {
         Blog blog = obtenerPorId(blogId);
 
+        // Validar que el blog permita comentarios
         if (!blog.isPermiteComentarios()) {
             throw new ExcepcionLogicaNegocio("Este blog no admite comentarios.");
         }
-        if (peticion.getPuntuacion() < 0 || peticion.getPuntuacion() > 10) {
+        
+        // Validar que la puntuación esté en el rango correcto
+        if (peticion.getPuntuacion() == null || peticion.getPuntuacion() < 0 || peticion.getPuntuacion() > 10) {
             throw new ExcepcionLogicaNegocio("La puntuación debe estar entre 0 y 10.");
+        }
+        
+        // Validar que no se exceda el límite de comentarios por blog (opcional)
+        if (blog.getComentarios().size() >= 100) {
+            throw new ExcepcionLogicaNegocio("Se ha alcanzado el límite máximo de comentarios para este blog (100).");
         }
 
         Comentario nuevoComentario = new Comentario();
