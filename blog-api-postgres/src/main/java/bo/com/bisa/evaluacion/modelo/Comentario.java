@@ -30,14 +30,13 @@ public class Comentario {
 
     private String paisResidenciaComentarista;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String contenido;
 
     @Column(nullable = false)
     private int puntuacion;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaPublicacion;
 }
 

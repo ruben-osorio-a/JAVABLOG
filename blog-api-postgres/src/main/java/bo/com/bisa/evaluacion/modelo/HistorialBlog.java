@@ -22,14 +22,15 @@ public class HistorialBlog {
     @JsonBackReference
     private Blog blog;
 
-    @Column(nullable = false)
+    @Column(name = "nombre_anterior", nullable = false)
     private String nombre;
 
+    @Column(name = "tema_anterior")
     private String tema;
 
-    @Lob
+    @Column(name = "contenido_anterior", columnDefinition = "TEXT")
     private String contenido;
 
-    @Column(nullable = false)
+    @Column(name = "fecha_actualizacion", nullable = false)
     private LocalDateTime fechaModificacion;
 }
