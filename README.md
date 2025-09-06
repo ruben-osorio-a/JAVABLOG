@@ -121,7 +121,7 @@ docker run -p 8861:8861 \
 - Swagger UI: `http://localhost:8861/swagger-ui.html`
 - PostgreSQL: `localhost:5432`
 
-> 📖 **Para instrucciones detalladas de Docker**, consulta [DOCKER_INSTRUCTIONS.md](DOCKER_INSTRUCTIONS.md)
+> 📖 **Para instrucciones detalladas de Docker**, consulta [DOCKER_INSTRUCIONES.md](Documentación/DOCKER_INSTRUCIONES.md)
 
 ## 🐳 Dockerfile
 
@@ -242,8 +242,8 @@ La aplicación utiliza Flyway para gestionar las migraciones de base de datos. L
 ## 📚 Documentación Adicional
 
 ### Documentación Completa de la API
-- **[API_DOCUMENTATION.md](API_DOCUMENTATION.md)** - Documentación detallada con ejemplos, casos de uso y mejores prácticas
-- **[INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)** - Guía de integración para desarrolladores con ejemplos en múltiples lenguajes
+- **[API_DOCUMENTACIÓN.md](Documentación/API_DOCUMENTACIÓN.md)** - Documentación detallada con ejemplos, casos de uso y mejores prácticas
+- **[GUÍA DE INTEGRACIÓN.md](Documentación/GUÍA DE INTEGRACIÓN.md)** - Guía de integración para desarrolladores con ejemplos en múltiples lenguajes
 
 ### Características de la Documentación
 - ✅ **Ejemplos prácticos** en JavaScript, Python, Java y PHP
