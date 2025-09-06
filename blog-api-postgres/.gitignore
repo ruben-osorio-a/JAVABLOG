@@ -36,3 +36,42 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Docker ###
+.dockerignore
+docker-compose.override.yml
+
+### Logs ###
+*.log
+logs/
+
+### Environment variables ###
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+### Database ###
+*.db
+*.sqlite
+*.sqlite3
+
+### Backup files ###
+*.backup
+*.bak
+*.sql
+
+### Temporary files ###
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+### IDE specific ###
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
